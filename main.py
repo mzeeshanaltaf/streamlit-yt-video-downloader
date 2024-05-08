@@ -1,5 +1,4 @@
 from streamlit_option_menu import option_menu
-import wx
 from utils import *
 
 output_dir = "./download"
@@ -13,9 +12,6 @@ st.set_page_config(page_title=page_title, page_icon=page_icon, layout="centered"
 # Setup title and description
 st.title(page_title)
 st.write("Easy and most convenient way to download YouTube videos.")
-
-# Crease wx application object in order to access the directory chooser dialog
-app = wx.App()
 
 # Main application functionality
 st.subheader("YouTube Video URL:")
@@ -56,12 +52,9 @@ if selection == "Download":
         st.write(f"Video Size: {file_size:.1f} MB")
         video_download = st.button('Download Video', type="primary")
         if video_download:
-            dialog = wx.DirDialog(None, "Choose download directory:",
-                                  style=wx.DD_DEFAULT_STYLE | wx.DD_DIR_MUST_EXIST)
-            if dialog.ShowModal() == wx.ID_OK:
-                folder_path = dialog.GetPath()
-                with st.spinner(''):
-                    download_youtube_videos(st.session_state.yt_stream, folder_path)
+            folder_path = select_folder()
+            with st.spinner(''):
+                download_youtube_videos(st.session_state.yt_stream, folder_path)
     except AttributeError:
         st.error("Load Video by clicking on above button")
 
@@ -75,7 +68,7 @@ if selection == "About":
         ''')
     with st.expander("Where to get the source code of this app?"):
         st.markdown(''' Source code is available at:
-    *  https://github.com/mzeeshanaltaf/streamlit-pk-nonfiler-eda
+    *  https://github.com/mzeeshanaltaf/streamlit-yt-video-downloader
         ''')
     with st.expander("Whom to contact regarding this app?"):
         st.markdown(''' Contact [Zeeshan Altaf](zeeshan.altaf@gmail.com)
