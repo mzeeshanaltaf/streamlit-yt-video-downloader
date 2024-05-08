@@ -1,6 +1,16 @@
 import streamlit as st
 from pytube import YouTube
 import pandas as pd
+import tkinter as tk
+from tkinter import filedialog
+
+
+def select_folder():
+    root = tk.Tk()
+    root.withdraw()
+    folder_path = filedialog.askdirectory(master=root)
+    root.destroy()
+    return folder_path
 
 
 def download_progress_callback(stream, chunk, remaining_bytes):
