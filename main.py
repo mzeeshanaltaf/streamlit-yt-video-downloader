@@ -1,7 +1,6 @@
 from streamlit_option_menu import option_menu
 from utils import *
 
-output_dir = "./download"
 
 # --- PAGE SETUP ---
 # Initialize streamlit app
@@ -50,11 +49,10 @@ if selection == "Download":
         st.subheader('Download Video')
         st.write(f"Video Title: **:green[{title}]**")
         st.write(f"Video Size: {file_size:.1f} MB")
-        video_download = st.button('Download Video', type="primary")
-        if video_download:
-            folder_path = select_folder()
-            with st.spinner(''):
-                download_youtube_videos(st.session_state.yt_stream, folder_path)
+        # video_contents = download_youtube_videos(st.session_state.yt_stream)
+        st.download_button('Download Video', type="primary",
+                           data=st.session_state.video_contents,
+                           file_name="yt_video.mp4")
     except AttributeError:
         st.error("Load Video by clicking on above button")
 
