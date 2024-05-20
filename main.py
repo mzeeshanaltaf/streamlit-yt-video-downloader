@@ -8,6 +8,7 @@ page_title = "YouTube Video Downloader"
 page_icon = "▶️"
 st.set_page_config(page_title=page_title, page_icon=page_icon, layout="centered")
 
+st.image('YT_Downloader.jpg')
 # Setup title and description
 st.title(page_title)
 st.write("Easy and most convenient way to download YouTube videos.")
