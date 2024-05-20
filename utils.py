@@ -1,8 +1,9 @@
 import streamlit as st
-from pytube import YouTube
 import pandas as pd
 import tkinter as tk
 from tkinter import filedialog
+from pytube import YouTube
+from io import BytesIO
 
 
 def select_folder():
@@ -19,13 +20,13 @@ def download_progress_callback(stream, chunk, remaining_bytes):
     downloaded_bytes = total_bytes - remaining_bytes
     download_percentage = (downloaded_bytes / total_bytes) * 100
     st.session_state.progress_bar.progress(round(download_percentage),
-                                           text="Download in progress. Please wait.")
+                                           )
 
 
 def download_complete_callback(stream, fp):
     # Clear the progress bar
     st.session_state.progress_bar.empty()
-    st.success("File has been downloaded successfully")
+    # st.success("File has been downloaded successfully")
 
 
 def format_views(views):
@@ -37,15 +38,19 @@ def format_views(views):
         return f"{views / 1000000:.1f}M"
 
 
-def download_youtube_videos(yd, output_folder):
-    progress_text = "Download in progress. Please wait."
-    st.session_state.progress_bar = st.progress(0, text=progress_text)
+def download_youtube_videos(yd):
+    # progress_text = "Download in progress. Please wait."
+    st.session_state.progress_bar = st.progress(0)
+    video_bytes = BytesIO()
+    yd.stream_to_buffer(video_bytes)
 
-    # Download YouTube video
-    yd.download(output_folder)
+    video_byte_contents = video_bytes.getvalue()
+    return video_byte_contents
 
 
 def get_youtube_videos_details(v_url, quality):
+    if "video_contents" not in st.session_state:
+        st.session_state.video_contents = None
     if "yt_df" not in st.session_state:
         st.session_state.yt_df = None
     if "yt_stream" not in st.session_state:
@@ -64,8 +69,10 @@ def get_youtube_videos_details(v_url, quality):
 
     if quality == "Low":
         st.session_state.yt_stream = yt.streams.get_lowest_resolution()
+        st.session_state.video_contents = download_youtube_videos(st.session_state.yt_stream)
     elif quality == "High":
         st.session_state.yt_stream = yt.streams.get_highest_resolution()
+        st.session_state.video_contents = download_youtube_videos(st.session_state.yt_stream)
 
     # Get YouTube video details
     video_title = yt.title
