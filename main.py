@@ -40,7 +40,7 @@ if selection == "Video Details":
         st.subheader('Video Thumbnail')
         st.image(st.session_state.yt_thumbnail, width=400)
     except AttributeError:
-        st.error("Load Video by entering the URL and clicking on :blue[***Load Video***] button.")
+        st.warning("Load Video by entering the URL and clicking on :blue[***Load Video***] button.")
 
 # If selection is "Download"
 if selection == "Download":
@@ -55,7 +55,7 @@ if selection == "Download":
                            data=st.session_state.video_contents,
                            file_name="yt_video.mp4")
     except AttributeError:
-        st.error("Load Video by entering the URL and clicking on :blue[***Load Video***] button.")
+        st.warning("Load Video by entering the URL and clicking on :blue[***Load Video***] button.")
 
 # If selection is "About"
 if selection == "About":
